@@ -25,7 +25,7 @@ jobs:
       - name: Pack Factorio Mod
         run: |
           ZIP_NAME="player-auto-build-2_${VERSION}.zip"
-          zip -r $ZIP_NAME -x ".git/*" ".github/*"
+          zip -r $ZIP_NAME . -x ".git/*" ".github/*"
           echo "ZIP_NAME=${ZIP_NAME}" >> $GITHUB_ENV
 
       # Initialisiere Upload
