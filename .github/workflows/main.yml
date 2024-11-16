@@ -3,7 +3,7 @@ name: Publish Factorio Mod
 on:
   push:
     branches:
-      - publish # Workflow wird nur bei Push auf publish-Branch ausgeführt
+      - publish
 
 jobs:
   publish:
@@ -21,19 +21,42 @@ jobs:
           VERSION=$(grep '"version":' info.json | sed -E 's/.*"version": "([^"]+)".*/\1/')
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
-      # Mod packen mit korrektem Namen, ohne .github/workflows
+      # Mod packen
       - name: Pack Factorio Mod
         run: |
           ZIP_NAME="player-auto-build-2_${VERSION}.zip"
-          zip -r $ZIP_NAME . -x ".github/*" # Ignoriert nur .github/workflows
+          zip -r $ZIP_NAME . -x ".github/workflows/*"
           echo "ZIP_NAME=${ZIP_NAME}" >> $GITHUB_ENV
 
-      # Mod hochladen
-      - name: Upload Mod to Factorio Mod Portal
+      # Initialisiere Upload
+      - name: Initialize Upload
+        id: init_upload
         env:
           FACTORIO_MOD_TOKEN: ${{ secrets.FACTORIO_MOD_TOKEN }}
+          MOD_NAME: "player-auto-build-2"
         run: |
-          curl -F "mod_file=@$ZIP_NAME" \
-               -F "version=${VERSION}" \
-               -H "Authorization: Bearer $FACTORIO_MOD_TOKEN" \
-               https://mods.factorio.com/api/v2/mods/player-auto-build-2/upload
+          RESPONSE=$(curl -s -X POST \
+            -H "Authorization: Bearer $FACTORIO_MOD_TOKEN" \
+            -F "mod=$MOD_NAME" \
+            https://mods.factorio.com/api/v2/mods/releases/init_upload)
+          echo $RESPONSE > init_upload_response.json
+          if ! grep -q '"upload_url":' init_upload_response.json; then
+            echo "init_upload failed: $RESPONSE"
+            exit 1
+          fi
+          UPLOAD_URL=$(cat init_upload_response.json | jq -r '.upload_url')
+          echo "UPLOAD_URL=${UPLOAD_URL}" >> $GITHUB_ENV
+
+      # Datei hochladen
+      - name: Upload Mod
+        env:
+          UPLOAD_URL: ${{ env.UPLOAD_URL }}
+        run: |
+          curl -s -X POST \
+            -F "file=@$ZIP_NAME" \
+            "$UPLOAD_URL" > upload_response.json
+          if ! grep -q '"success":true' upload_response.json; then
+            echo "Upload failed: $(cat upload_response.json)"
+            exit 1
+          fi
+          echo "Upload successful!"
