@@ -21,12 +21,11 @@ jobs:
           VERSION=$(grep '"version":' info.json | sed -E 's/.*"version": "([^"]+)".*/\1/')
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
-      # Mod packen mit korrektem Namen, ohne unerwünschte Dateien
+      # Mod packen mit korrektem Namen, ohne .github/workflows
       - name: Pack Factorio Mod
         run: |
           ZIP_NAME="player-auto-build-2_${VERSION}.zip"
-          zip -r $ZIP_NAME . \
-            -x ".github/*" ".git*" "README.md" "*.yml" # Schließt unerwünschte Dateien aus
+          zip -r $ZIP_NAME . -x ".github/*" # Ignoriert nur .github/workflows
           echo "ZIP_NAME=${ZIP_NAME}" >> $GITHUB_ENV
 
       # Mod hochladen
