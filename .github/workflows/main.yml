@@ -1,0 +1,40 @@
+name: Publish Factorio Mod
+
+on:
+  push:
+    branches:
+      - publish # Workflow wird nur bei Push auf publish-Branch ausgeführt
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Repository auschecken
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      # Version aus info.json auslesen
+      - name: Extract version from info.json
+        id: get_version
+        run: |
+          VERSION=$(grep '"version":' info.json | sed -E 's/.*"version": "([^"]+)".*/\1/')
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+
+      # Mod packen mit korrektem Namen, ohne unerwünschte Dateien
+      - name: Pack Factorio Mod
+        run: |
+          ZIP_NAME="player-auto-build-2_${VERSION}.zip"
+          zip -r $ZIP_NAME . \
+            -x ".github/*" ".git*" "README.md" "*.yml" # Schließt unerwünschte Dateien aus
+          echo "ZIP_NAME=${ZIP_NAME}" >> $GITHUB_ENV
+
+      # Mod hochladen
+      - name: Upload Mod to Factorio Mod Portal
+        env:
+          FACTORIO_MOD_TOKEN: ${{ secrets.FACTORIO_MOD_TOKEN }}
+        run: |
+          curl -F "mod_file=@$ZIP_NAME" \
+               -F "version=${VERSION}" \
+               -H "Authorization: Bearer $FACTORIO_MOD_TOKEN" \
+               https://mods.factorio.com/api/v2/mods/player-auto-build-2/upload
