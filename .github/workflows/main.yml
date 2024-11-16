@@ -24,12 +24,8 @@ jobs:
       # Mod packen mit korrektem Verzeichnisaufbau
       - name: Pack Factorio Mod
         run: |
-          MOD_FOLDER="player-auto-build-2_${VERSION}"
-          mkdir -p $MOD_FOLDER
-          cp -r ./* $MOD_FOLDER
-          rm -rf $MOD_FOLDER/.github $MOD_FOLDER/.git
-          ZIP_NAME="${MOD_FOLDER}.zip"
-          zip -r $ZIP_NAME $MOD_FOLDER
+          ZIP_NAME="player-auto-build-2_${VERSION}.zip"
+          zip -r $ZIP_NAME -x ".git/*" ".github/*"
           echo "ZIP_NAME=${ZIP_NAME}" >> $GITHUB_ENV
 
       # Initialisiere Upload
