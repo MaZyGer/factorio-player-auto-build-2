@@ -1,0 +1,55 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+Date: 16.11.2024
+  Bugfixes:
+    - Fixed health was wrong.
+    - Removed forgotten debug prints.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 14.11.2024
+  Bugfixes:
+    - Fixed last changes was missing a line which caused an error.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 14.11.2024
+  Features:
+    - Concretes, stones etc are working now. You can destruct concretes and also ghost build them, yayyy!!
+  Bugfixes:
+    - Fixed entities without health could cause error.
+    - Fixed sometimes items from inventory didn't get removed.
+  Changes:
+    - Only code based changes and preparing for the upgrade function.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 11.11.2024
+  Bugfixes:
+    - Fixed marked entities were added multipe time
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 11.11.2024
+  Bugfixes:
+    - Fixed error caused by accessing to remote view
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 10.11.2024
+  Features:
+    - Now it also works without player character gamemode (like sandbox).
+  Changes:
+    - Lots of changes for performance boost.
+  Bugfixes:
+    - Cliff itemname was wrong which caused error.
+    - Neighbour cliffs didn't rotate after it was destroyed.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 09.11.2024
+  Changes:
+    - Updated mod to work in Factorio 2 (Space Age not tested)
+    - Cliff will be only removed if you have cliff explosives in the inventory now. It was not a bug, but was cheaty-like.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 18.11.2021
+  Changes:
+    - Mod continued by MaZy (player-auto-build Author was 'William Newbery (SyncViews)')
+    - Added deconstruction
+    - Added cliff removeable
+    - Performance fixes
