@@ -88,6 +88,8 @@ function try_build_ghost(player, info)
 
       enqueue_action(ghost_entity, function()
         local inv = player.get_main_inventory()
+        if not inv or not inv.valid then return end
+        
         if ghost_entity.valid then
 
           local items = ghost_entity.ghost_prototype.items_to_place_this or {}
