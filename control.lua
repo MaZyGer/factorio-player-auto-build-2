@@ -309,7 +309,7 @@ end)
 
 script.on_event(defines.events.on_tick, function(event)
   for _,player in pairs(game.players) do
-    if player.connected and ((game.tick + player.index) % 4) == 0 then
+    if player.connected and ((game.tick + player.index) % 4) == 0 and player.get_main_inventory() then
       update_player(player)
     end
   end
