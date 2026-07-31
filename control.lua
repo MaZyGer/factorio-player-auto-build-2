@@ -80,8 +80,6 @@ function get_distance(pos1, pos2)
 end
 
 function try_build_ghost(player, info)
-  local inv = player.get_main_inventory()
-  
   for _, ghost_entity in pairs(info.ghost_entities) do
 
     local skipDistanceCheck = player.character == nil
@@ -89,6 +87,9 @@ function try_build_ghost(player, info)
     if(skipDistanceCheck or get_distance(player.position, ghost_entity.position) < info.ghost_search_range) then
 
       enqueue_action(ghost_entity, function()
+        local inv = player.get_main_inventory()
+        if not inv or not inv.valid then return end
+        
         if ghost_entity.valid then
 
           local items = ghost_entity.ghost_prototype.items_to_place_this or {}
