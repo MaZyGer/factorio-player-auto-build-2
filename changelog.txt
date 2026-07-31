@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.7
+Date: 31.07.2026 
+Note: Fixed was already done in 10.05.2026 by lionbryce but I was not active in github for long time
+  Bugfixes:
+    - [Github] jetpack inventory #6
+---------------------------------------------------------------------------------------------------
 Version: 1.2.6
 Date: 16.10.2025
   Bugfixes:
